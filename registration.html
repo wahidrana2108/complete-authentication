@@ -96,7 +96,7 @@
 
         // Register user to Firebse
         function RegisterUser(){
-            if(Validation()){
+            if(!Validation()){
                 return;
             }
             const dbRef = ref(db);
