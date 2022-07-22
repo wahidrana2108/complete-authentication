@@ -14,10 +14,11 @@
     <div class="container">
         <br><h3>Registration</h3><br>
         <form action="">
-            <input type="text" name="userName" id="userName" class="form-control m-3" placeholder="User Name">
+            <input type="text" name="name" id="name" class="form-control m-3" placeholder="Name">
+            <input type="text" name="user" id="user" class="form-control m-3" placeholder="User Name">
             <input type="email" name="email" id="email" class="form-control m-3" placeholder="Email">
             <input type="password" name="password" id="password" class="form-control m-3" placeholder="Password">
-            <button class="form-control m-3 btn btn-success">Sign up</button>
+            <button class="form-control m-3 btn btn-success" id="submit">Sign up</button>
             <a href="login.html" class="form-control badge text-bg-secondary m-3"> Already have a account?</a>
         </form>
     </div>
@@ -63,6 +64,66 @@
         import { getDatabase, ref, set, child, get } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-database.js";
 
         const db = getDatabase();
+
+        // References
+        const name = document.getElementById('name');
+        const user = document.getElementById('user');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const submit = document.getElementById('submit');
+
+        // Validation
+        function Validation(){
+            let nameregex = /^[a-zA-Z]+$/;
+            let emailregex = /^[a-zA-Z0-9]+@(gmail|yahoo|outlook)\.com$/;
+            let userregex = /^[a-zA-Z0-9]{5,}$/;
+
+            if(!nameregex.test(name.value)){
+                alert("The name should contain only alphabets!");
+                return false;
+            }
+            if(!userregex.test(user.value)){
+                alert("The username should contain only alphabets and numbers!");
+                return false;
+            }
+            if(!email.test(email.value)){
+                alert("Email must be in standard form!");
+                return false;
+            }
+
+            return true;
+        }
+
+        // Register user to Firebse
+        function RegisterUser(){
+            if(Validation()){
+                return;
+            }
+            const dbRef = ref(db);
+
+            get(child(dbRef, "UsersList/"+ username.value.value)).then((snapshot)=>{
+                if(snapshot.exists()){
+                    alert("Account already Exists!");
+                }
+                else{
+                    set(ref(db, "UserList/"+ username.value),{
+                        fullname: name.value,
+                        username: user.value,
+                        email: email.value,
+                        password: password.value
+                    })
+                    .then(()=>{
+                        alert("User added successfully!");
+                    })
+                    .catch((error)=>{
+                        alert("error"+error);
+                    })
+                }
+            })
+        }
+
+        // Assign the event
+        submit.addEventListener('click', RegisterUser);
 
       </script>
 </body>
