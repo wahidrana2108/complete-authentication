@@ -61,6 +61,68 @@
         import { getDatabase, ref, set, child, get } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-database.js";
 
         const db = getDatabase();
+
+        // the referance
+        const name = document.getElementById('nameInp');
+        const email = document.getElementById('emailInp');
+        const username = document.getElementById('userInp');
+        const pass = document.getElementById('passInp');
+        const submit = document.getElementById('sub_btn');
+
+
+        // validation
+        function validation(){
+            let nameregex = /^[a-zA-Z]+$/;
+            let emailregex= /^[a-zA-Z0-9]+@(gmail|yahoo)\.com$/;
+            let userregex= /^[a-zA-Z0-9]{5,}$/;
+
+            if(!nameregex.test(name.value)){
+                alert("Name Should contain only alphabets!");
+                return false;
+            }
+            if(!emailregex.test(email.value)){
+                alert("Invalid Email!");
+                return false;
+            }
+            if(!userregex.test(username.value)){
+                alert("Invalid user name!");
+                return false;
+            }
+            return true;
+        }
+
+
+        // regester user to firebase
+        function RegisterUser(){
+            if(!validation()){
+                return;
+            }
+
+            const dbRef = ref(db);
+
+            get(child(dbRef, "UserList/"+ username.value)).then((snapshot)=>{
+                if(snapshot.exist()){
+                    alert("Account Already Exists!");
+                }
+                else{
+                    set(ref(db, "UserList/"+ username.value),{
+                        fullname: name.value,
+                        email: email.value,
+                        username: username.value,
+                        password: pass.value
+                    })
+                    .then(()=>{
+                        alert("User added Successfully!");
+                    })
+                    .catch((error)=>{
+                        alert("error"+ error);
+                    })
+                }
+            });
+        }
+
+        // event listener
+        submit.addEventListener('click', RegisterUser);
       
 
 
