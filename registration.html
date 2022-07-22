@@ -71,10 +71,21 @@
 
 
         // validation
+
+        function isEmptySpaces(str){
+            return str === null || str.match(/^ *$/) !== null;
+        }
+
+
         function validation(){
             let nameregex = /^[a-zA-Z]+$/;
             let emailregex= /^[a-zA-Z0-9]+@(gmail|yahoo)\.com$/;
             let userregex= /^[a-zA-Z0-9]{5,}$/;
+
+            if(isEmptySpaces(name.value) || isEmptySpaces(email.value) || isEmptySpaces(username.value) || isEmptySpaces(pass.value)){
+                alert("All field should be filled!");
+                return false;
+            }
 
             if(!nameregex.test(name.value)){
                 alert("Name Should contain only alphabets!");
