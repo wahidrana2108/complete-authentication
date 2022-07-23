@@ -19,16 +19,16 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarScroll">
             <ul class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-              <li class="nav-item">
+              <li class="nav-item mx-1">
                 <a class="nav-link active" aria-current="page" href="userlink">User</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item mx-1">
                 <a class="nav-link active" aria-current="page" href="signoutlink">Log Out</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item mx-1">
                 <a class="nav-link active" aria-current="page" href="login.html">Log In</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item mx-1">
                 <a class="nav-link active" aria-current="page" href="registration.html">Registration</a>
               </li>
             </ul>
@@ -46,7 +46,67 @@
 
 
 
+    <!-- script firebase -->
 
+    <script>
+      // referance
+      let userlink = document.getElementById('userlink');
+      let signoutlink = document.getElementById('signoutlink');
+      let header = document.getElementById('hh');
+      var currentUser = null;
+
+      // functions
+      function getUsername(){
+        let keepLoggedIn = localStorage.getItem("keepLoggedIn");
+
+        if(keepLoggedIn == "yes"){
+          currentUser = JSON.parse(localStorage.getItem('user'));
+        }
+        else{
+          currentUser = JSON.parse(sessionStorage.getItem('user'));
+        }
+      }
+
+      function Signout(){
+        sessionStorage.removeItem('user');
+        localStorage.removeItem('user');
+        localStorage.removeItem('keepLoggedIn');
+        window.location = "index.html";
+      }
+
+
+      // window loads
+      window.onload = function(){
+        getUsername();
+        if(currentUser == null){
+          userlink.innerText="Creat new account";
+          userlink.classList.replace("nav-link", "btn");
+          userlink.classList.add("btn-primary");
+          userlink.href = "registration.html";
+
+
+          signoutlink.innerText="Login";
+          signoutlink.classList.replace("nav-link", "btn");
+          signoutlink.classList.add("btn-success");
+          signoutlink.href = "login.html";
+        }
+        else{
+          userlink.innerText=currentUser.username;
+          header.innerText = "Welcome"+ currentUser.fullname;
+          userlink.classList.replace("btn", "nav-link");
+          userlink.classList.remove("btn-primary");
+          userlink.href = "#";
+
+          signoutlink.innerText="Sign Out";
+          signoutlink.classList.replace("btn", "nav-link");
+          signoutlink.classList.remove("btn-success");
+          signoutlink.href = "javascript:Signout()";
+        }
+      }
+
+
+
+    </script>
 
 
 

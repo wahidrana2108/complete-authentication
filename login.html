@@ -14,10 +14,10 @@
     <div class="container">
         <br><h3>Login</h3><br>
         <form action="">
-            <input type="email" name="email" id="email" class="form-control m-3" placeholder="Email">
+            <input type="text" name="user" id="userInp" class="form-control m-3"   placeholder="User Name">
             <input type="password" name="password" id="password" class="form-control m-3" placeholder="Password">
             <div class="form-check form-switch m-3">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                <input class="form-check-input" type="checkbox" role="switch" id="SwitchCheckChecked" checked>
                 <label class="form-check-label" for="flexSwitchCheckChecked">Keep me Logged In</label>
               </div>
             <button class="form-control m-3 btn btn-success">Login</button>
@@ -65,6 +65,56 @@
       import { getDatabase, ref, set, child, get } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-database.js";
 
       const db = getDatabase();
+
+
+        // the referance
+        const username = document.getElementById('userInp');
+        const pass = document.getElementById('passInp');
+        const submit = document.getElementById('sub_btn');
+
+        // authentication
+        function AuthenticationUser(){
+          const dbref = ref(db);
+
+          get(child(dbref, "UserList/"+ username.value)).then((snapshot)=>{
+            if(snapshot.exists()){
+                    let dbpass = decPass(snapshot.val().password);
+                    if(dbpass == pass.value){
+                      login(snapshot.val());
+                    }
+                    else{
+                      alert("user does not exists!");
+                    }
+                }
+                else{
+                    alert("user or password is invalid!");
+                }
+          });
+        }
+
+        // decript process
+        function decPass(dbpass){
+            var pass12 = CryptoJS.AES.decrypt(dbpass, pass.value);
+            return pass12.toString(CryptoJS.enc.Utf8);
+        }
+
+        // login
+        function login(user){
+          let keepLoggedIn = document.getElementById('SwitchCheckChecked').checked;
+
+          if (!keepLoggedIn){
+            sessionStorage.setItem('user', JSON.stringify(user));
+            window.location="index.html";
+          }
+          else{
+            localStorage.setItem('keepLoggedIn', 'yes');
+            localStorage.setItem('user', JSON.stringify(user));
+            window.location="index.html";
+          }
+        }
+
+        // event listener
+        submit.addEventListener('click', AuthenticationUser);
     
 
 

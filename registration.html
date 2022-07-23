@@ -120,7 +120,7 @@
                         fullname: name.value,
                         email: email.value,
                         username: username.value,
-                        password: pass.value
+                        password: encPass()
                     })
                     .then(()=>{
                         alert("User added Successfully!");
@@ -131,6 +131,14 @@
                 }
             });
         }
+
+        // encription
+        function encPass(){
+            var pass12 = CryptoJS.AES.encrypt(pass.value, pass.value);
+            return pass12.toString();
+        }
+
+
 
         // event listener
         submit.addEventListener('click', RegisterUser);
