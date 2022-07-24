@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="style/css/style.css">
 </head>
 <body>
-    <!-- regestration  section-->
+    <!-- registration  section-->
     <div class="container">
         <br><h3>Login</h3><br>
         <form action="">
@@ -44,10 +44,9 @@
 
     <!-- firebase authentication -->
     <script type="module">
-      // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
-    
-     
+      
+       
       // Your web app's Firebase configuration
       const firebaseConfig = {
         apiKey: "AIzaSyDOM1boMigBcIJCP86VE4Hd-i6xoJBCU3k",
@@ -66,34 +65,33 @@
 
       const db = getDatabase();
 
+      // the refreneces
+      const username = document.getElementById('userInp');
+      const pass = document.getElementById('passInp');
+      const submit = document.getElementById('sub_btn');
 
-        // the referance
-        const username = document.getElementById('userInp');
-        const pass = document.getElementById('passInp');
-        const submit = document.getElementById('sub_btn');
+      // authentication process
+      function AuthenticateUser(){
+        const dbRef = ref(db);
 
-        // authentication
-        function AuthenticationUser(){
-          const dbref = ref(db);
-
-          get(child(dbref, "UserList/"+ username.value)).then((snapshot)=>{
-            if(snapshot.exists()){
+        get(child(dbRef, "UserList/"+ username.value)).then((snapshot)=>{
+                if(snapshot.exists()){
                     let dbpass = decPass(snapshot.val().password);
                     if(dbpass == pass.value){
                       login(snapshot.val());
                     }
                     else{
-                      alert("user does not exists!");
+                      alert("user does not exists");
                     }
                 }
                 else{
-                    alert("user or password is invalid!");
+                    alert("user of password id not valid!");
                 }
-          });
-        }
+            });
+      }
 
-        // decript process
-        function decPass(dbpass){
+      // decription
+      function decPass(dbpass){
             var pass12 = CryptoJS.AES.decrypt(dbpass, pass.value);
             return pass12.toString(CryptoJS.enc.Utf8);
         }
@@ -101,8 +99,7 @@
         // login
         function login(user){
           let keepLoggedIn = document.getElementById('SwitchCheckChecked').checked;
-
-          if (!keepLoggedIn){
+          if(!keepLoggedIn){
             sessionStorage.setItem('user', JSON.stringify(user));
             window.location="index.html";
           }
@@ -113,9 +110,6 @@
           }
         }
 
-        // event listener
-        submit.addEventListener('click', AuthenticationUser);
-    
 
 
     </script>
