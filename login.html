@@ -20,7 +20,7 @@
                 <input class="form-check-input" type="checkbox" role="switch" id="SwitchCheckChecked" checked>
                 <label class="form-check-label" for="flexSwitchCheckChecked">Keep me Logged In</label>
               </div>
-            <button class="form-control m-3 btn btn-success">Login</button>
+              <button class="form-control m-3 btn btn-success" id="sub_btn">Log In</button>
             <a href="registration.html" class="form-control badge text-bg-secondary m-3">Don't have a account?</a>
         </form>
     </div>
@@ -65,18 +65,19 @@
 
       const db = getDatabase();
 
-      // the refreneces
+      // the references
       const username = document.getElementById('userInp');
       const pass = document.getElementById('passInp');
       const submit = document.getElementById('sub_btn');
 
       // authentication process
       function AuthenticateUser(){
-        const dbRef = ref(db);
+        const dbref = ref(db);
 
-        get(child(dbRef, "UserList/"+ username.value)).then((snapshot)=>{
+        get(child(dbref, "UserList/"+ username.value)).then((snapshot)=>{
                 if(snapshot.exists()){
                     let dbpass = decPass(snapshot.val().password);
+                    
                     if(dbpass == pass.value){
                       login(snapshot.val());
                     }
@@ -90,7 +91,7 @@
             });
       }
 
-      // decription
+      // decryption
       function decPass(dbpass){
             var pass12 = CryptoJS.AES.decrypt(dbpass, pass.value);
             return pass12.toString(CryptoJS.enc.Utf8);
@@ -109,6 +110,10 @@
             window.location="index.html";
           }
         }
+    
+
+        // event listener
+        submit.addEventListener('click', AuthenticateUser);
 
 
 

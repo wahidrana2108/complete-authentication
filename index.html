@@ -11,31 +11,104 @@
 <body>
     <!-- Navbar section -->
     <div class="container">
-        <nav class="navbar navbar-expand-lg bg-light">
+      <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar scroll</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarScroll">
-            <ul class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-              <li class="nav-item mx-1">
-                <a class="nav-link active" aria-current="page" href="userlink">User</a>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
-              <li class="nav-item mx-1">
-                <a class="nav-link active" aria-current="page" href="signoutlink">Log Out</a>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
               </li>
-              <li class="nav-item mx-1">
-                <a class="nav-link active" aria-current="page" href="login.html">Log In</a>
-              </li>
-              <li class="nav-item mx-1">
-                <a class="nav-link active" aria-current="page" href="registration.html">Registration</a>
+              <li class="nav-item">
+                <a class="nav-link disabled">Disabled</a>
               </li>
             </ul>
+            <form class="d-flex" role="search">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a id="userlink" class="nav-link active  m-2" aria-current="page" href="#">User Name</a>
+                </li>
+                <li class="nav-item">
+                  <a id="signoutlink" class="nav-link active m-2" aria-current="page" href="#">Sign Out</a>
+                </li>
+              </ul>
+            </form>
           </div>
         </div>
       </nav>
     </div>
+
+    <h3 id="hh"></h3>
+
+    <script>
+      // reference
+      let userlink = document.getElementById('userlink');
+      let signoutlink = document.getElementById('signoutlink');
+      let header = document.getElementById('hh');
+      var currentUser = null;
+
+
+      // functions
+
+      function getUsername(){
+        let keepLoggedIn = localStorage.getItem('keepLoggedIn');
+
+        if(keepLoggedIn == "yes"){
+          currentUser = JSON.parse(localStorage.getItem('user'));
+        }
+        else{
+          currentUser = JSON.parse(sessionStorage.getItem('user'));
+        }
+      }
+
+
+      function Signout(){
+        sessionStorage.removeItem('user');
+        localStorage.removeItem('user');
+        localStorage.removeItem('keepLoggedIn');
+        window.location = "index.html";
+      }
+
+
+      // window loads 
+      window.onload = function(){
+        getUsername();
+
+        if(currentUser == null){
+          userlink.innerText = "Create New Account";
+          userlink.classList.replace("nav-link", "btn");
+          userlink.classList.add("btn-primary");
+          userlink.href = "registration.html";
+
+
+          signoutlink.innerText = "LogIn";
+          signoutlink.classList.replace("nav-link", "btn");
+          signoutlink.classList.add("btn-success");
+          signoutlink.href = "login.html";
+        }
+        else{
+          userlink.innerText = currentUser.username;
+          header.innerText = "Welcome "+ currentUser.fullname;
+          userlink.classList.replace("btn", "nav-link");
+          userlink.classList.remove("btn-primary");
+          userlink.href = "registration.html";
+
+          
+          userlink.innerText = "Sign  Out";
+          userlink.classList.replace("btn", "nav-link");
+          userlink.classList.remove("btn-success");
+          userlink.href = "javascript:Signout()";
+        }
+      }
+
+
+    </script>
 
 
 
